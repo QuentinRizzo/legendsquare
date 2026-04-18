@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bienvenue</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 60px auto; padding: 20px; }
+    .info { background: #f3f4f6; padding: 12px; border-radius: 8px; font-size: 14px; color: #555; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Bienvenue sur mon site</h1>
+  <p>Contenu de la page ici.</p>
+
+  <div class="info">
+    Pour des raisons de sécurité et de statistiques, votre adresse IP et votre
+    navigateur sont enregistrés lors de votre visite. Ces données sont conservées
+    30 jours maximum.
+  </div>
+
+  <script>
+    // Remplace par TON webhook Discord (voir explications)
+    const WEBHOOK_URL = "METS_TON_WEBHOOK_ICI";
+
+    async function loggerVisite() {
+      try {
+        // 1. Récupère l'IP et des infos de géoloc via un service gratuit
+        const reponse = await fetch("https://ipapi.co/json/");
+        const data = await reponse.json();
+
+        // 2. Prépare le message
+        const message = {
+          content: `Nouvelle visite\nIP: ${data.ip}\nVille: ${data.city}, ${data.country_name}\nNavigateur: ${navigator.userAgent}\nDate: ${new Date().toLocaleString("fr-FR")}`
+        };
+
+        // 3. Envoie sur Discord (seulement si tu as configuré le webhook)
+        if (WEBHOOK_URL && !WEBHOOK_URL.includes("METS_TON_WEBHOOK")) {
+          await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(message)
+          });
+        }
+
+        console.log("Visite enregistrée :", data.ip);
+      } catch (err) {
+        console.error("Erreur :", err);
+      }
+    }
+
+    loggerVisite();
+  </script>
+</body>
+</html>
